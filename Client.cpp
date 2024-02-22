@@ -1,6 +1,6 @@
 #include <iostream>
 #include <winsock2.h>
-
+#include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
 // É|Å[Égî‘çÜ
