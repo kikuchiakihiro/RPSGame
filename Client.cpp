@@ -28,7 +28,6 @@ int main() {
     // サーバーに接続
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
-   
     serverAddr.sin_port = htons(SERVERPORT); // サーバーのポート番号を指定
     inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr.s_addr);
     if (connect(clientSocket, reinterpret_cast<sockaddr*>(&serverAddr), sizeof(serverAddr)) == SOCKET_ERROR) {
@@ -40,29 +39,33 @@ int main() {
 
     std::cout << "Connected to server." << std::endl;
 
-    // じゃんけんの選択
-    int choice;
-    do {
-        std::cout << "Enter your move (1: Rock, 2: Paper, 3: Scissors): ";
-        std::cin >> choice;
-    } while (choice < 1 || choice > 3);
+    // 3回のじゃんけん勝負
+    for (int i = 0; i < 3; ++i) {
+        // じゃんけんの選択
+        int choice;
+        do {
+            std::cout << "Enter your move (1: Rock, 2: Paper, 3: Scissors): ";
+            std::cin >> choice;
+        } while (choice < 1 || choice > 3);
 
-    // 選択をサーバーに送信
-    send(clientSocket, reinterpret_cast<const char*>(&choice), sizeof(choice), 0);
+        // 選択をサーバーに送信
+        send(clientSocket, reinterpret_cast<const char*>(&choice), sizeof(choice), 0);
 
-    // 結果を受信して表示
-    int result;
-    int bytesReceived = recv(clientSocket, reinterpret_cast<char*>(&result), sizeof(result), 0);
-    if (bytesReceived > 0) {
-        if (result == 0)
-            std::cout << "It's a tie!" << std::endl;
-        else if (result == 1)
-            std::cout << "You win!" << std::endl;
-        else
-            std::cout << "You lose!" << std::endl;
-    }
-    else {
-        std::cerr << "Recv failed or server disconnected." << std::endl;
+        // 結果を受信して表示
+        int result;
+        int bytesReceived = recv(clientSocket, reinterpret_cast<char*>(&result), sizeof(result), 0);
+        if (bytesReceived > 0) {
+            if (result == 0)
+                std::cout << "Round " << i + 1 << ": It's a tie!" << std::endl;
+            else if (result == 1)
+                std::cout << "Round " << i + 1 << ": You win!" << std::endl;
+            else
+                std::cout << "Round " << i + 1 << ": You lose!" << std::endl;
+        }
+        else {
+            std::cerr << "Recv failed or server disconnected." << std::endl;
+            break;
+        }
     }
 
     // ソケットを閉じる
