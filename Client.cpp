@@ -54,6 +54,8 @@ int main() {
         // Œ‹‰Ê‚ğóM‚µ‚Ä•\¦
         int result;
         int bytesReceived = recv(clientSocket, reinterpret_cast<char*>(&result), sizeof(result), 0);
+        std::cout << bytesReceived<<result<<std::endl;
+
         if (bytesReceived > 0) {
             if (result == 0)
                 std::cout << "Round " << i + 1 << ": It's a tie!" << std::endl;
