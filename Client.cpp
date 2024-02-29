@@ -29,7 +29,7 @@ int main() {
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(SERVERPORT); // サーバーのポート番号を指定
-    inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr.s_addr);
+    inet_pton(AF_INET, "192.168.43.43", &serverAddr.sin_addr.s_addr);
     if (connect(clientSocket, reinterpret_cast<sockaddr*>(&serverAddr), sizeof(serverAddr)) == SOCKET_ERROR) {
         std::cerr << "Failed to connect to server." << std::endl;
         closesocket(clientSocket);
